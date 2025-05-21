@@ -1,6 +1,7 @@
 import { Contact } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 
+import { isValidImageUrl } from "../middleware/validImageUrl";
 import { JWTPayload } from "../modules/auth";
 import { prisma } from "../server";
 
@@ -81,12 +82,12 @@ export async function deleteContact(
 
 export async function updateContact(
   request: FastifyRequest<{
-    Body: Pick<Contact, "id" | "name" | "email" | "phone" | "avatarUrl">;
+    Body: Pick<Contact, "id" | "name" | "email" | "phone">;
   }>,
   reply: FastifyReply
 ) {
   try {
-    const { id, name, email, phone, avatarUrl } = request.body;
+    const { id, name, email, phone } = request.body;
     const { id: userId } = request.user as JWTPayload;
 
     if (!userId) {
@@ -102,12 +103,61 @@ export async function updateContact(
         name,
         email,
         phone,
-        avatarUrl,
       },
     });
 
     return reply.code(200).send(contact);
   } catch {
     reply.code(500).send({ message: "Error updating contact" });
+  }
+}
+
+export async function updateAvatar(
+  request: FastifyRequest<{
+    Body: { id: number; avatarUrl: string };
+  }>,
+  reply: FastifyReply
+) {
+  try {
+    const { id, avatarUrl } = request.body;
+    const { id: userId } = request.user as JWTPayload;
+
+    if (!userId) {
+      return reply.code(401).send({ message: "Unauthorized" });
+    }
+
+    if (avatarUrl === null) {
+      const updatedContact = await prisma.contact.updateMany({
+        where: { id, userId },
+        data: { avatarUrl: null },
+      });
+
+      return reply.code(200).send({ updatedContact });
+    }
+
+    const imageCheckResult = await isValidImageUrl(avatarUrl);
+
+    if (!imageCheckResult.isImage) {
+      return reply
+        .code(400)
+        .send({ message: "A URL fornecida não é uma imagem válida." });
+    }
+
+    const updated = await prisma.contact.updateMany({
+      where: { id, userId },
+      data: { avatarUrl: imageCheckResult.finalUrl },
+    });
+
+    if (updated.count === 0) {
+      return reply.code(404).send({
+        message: "Contato não encontrado ou não pertence ao usuário.",
+      });
+    }
+
+    const contact = await prisma.contact.findUnique({ where: { id } });
+
+    return reply.code(200).send({ contact, updated });
+  } catch {
+    return reply.code(500).send({ message: "Erro ao atualizar o avatar." });
   }
 }

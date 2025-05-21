@@ -4,6 +4,7 @@ import {
   addContact,
   deleteContact,
   getContacts,
+  updateAvatar,
   updateContact,
 } from "../controllers/contact.controller";
 
@@ -23,5 +24,9 @@ export async function contactRoutes(app: FastifyInstance) {
   app.patch("/update", {
     preHandler: [app.authenticate],
     handler: updateContact,
+  });
+  app.patch("/update-avatar", {
+    preHandler: [app.authenticate],
+    handler: updateAvatar,
   });
 }
