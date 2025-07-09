@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
-import { JWTPayload } from "../modules/auth";
+import { JWTPayload } from "../@types/auth";
 
 export async function authMiddleware(app: FastifyInstance) {
   app.decorate(

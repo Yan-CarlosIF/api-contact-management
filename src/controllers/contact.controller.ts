@@ -1,8 +1,8 @@
 import { Contact } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 
+import { JWTPayload } from "../@types/auth";
 import { isValidImageUrl } from "../middleware/validImageUrl";
-import { JWTPayload } from "../modules/auth";
 import { prisma } from "../server";
 
 export async function addContact(

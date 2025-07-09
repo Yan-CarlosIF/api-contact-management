@@ -1,4 +1,6 @@
+import "reflect-metadata";
 import "dotenv/config";
+import "./shared/container";
 
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
@@ -36,6 +38,7 @@ app.register(fastifyJwt, {
 });
 
 authMiddleware(app);
+
 app.register(authRoutes, { prefix: "/auth" });
 app.register(contactRoutes, { prefix: "/contact" });
 app.register(userRoutes, { prefix: "/user" });

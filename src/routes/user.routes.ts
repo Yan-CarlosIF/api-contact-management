@@ -1,10 +1,16 @@
 import { FastifyInstance } from "fastify";
 
-import { getUser } from "../controllers/user.controller";
+import { GetUserController } from "../modules/users/useCases/getUser/get-user.controller";
+import { RegisterController } from "../modules/users/useCases/register/register.controller";
+
+const registerUserController = new RegisterController();
+const getUserController = new GetUserController();
 
 export async function userRoutes(app: FastifyInstance) {
-  app.get("/get", {
+  app.post("/register", { handler: registerUserController.handle });
+
+  app.get("/", {
     preHandler: [app.authenticate],
-    handler: getUser,
+    handler: getUserController.handle,
   });
 }
