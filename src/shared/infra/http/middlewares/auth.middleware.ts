@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
-import { JWTPayload } from "../@types/auth";
+import { JWTPayload } from "@/@types/auth";
+import { AppError } from "@/shared/errors/app-error";
 
 export async function authMiddleware(app: FastifyInstance) {
   app.decorate(
@@ -10,14 +11,17 @@ export async function authMiddleware(app: FastifyInstance) {
         const { token } = request.cookies;
 
         if (!token) {
-          return reply.code(401).send({ message: "Token not found" });
+          throw new AppError("Token not found", 401);
         }
 
         const payload = app.jwt.verify<JWTPayload>(token);
 
         request.user = payload;
-      } catch {
-        reply.code(401).send({ message: "Invalid token" });
+      } catch (err) {
+        const { message, statusCode } =
+          err instanceof AppError ? err : new AppError("Invalid Token", 401);
+
+        reply.status(statusCode).send({ message });
       }
     }
   );

@@ -16,7 +16,14 @@ export function isValidImageUrl(
       return resolve({ isImage: false, finalUrl: url });
     }
 
-    const parsedUrl = new URL(url);
+    let parsedUrl: URL;
+
+    try {
+      parsedUrl = new URL(url);
+    } catch {
+      return resolve({ isImage: false, finalUrl: url });
+    }
+
     const client = parsedUrl.protocol === "https:" ? httpsRequest : httpRequest;
 
     const req = client(

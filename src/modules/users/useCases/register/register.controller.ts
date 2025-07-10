@@ -9,18 +9,12 @@ export class RegisterController {
     request: FastifyRequest<{ Body: IRegisterDTO }>,
     reply: FastifyReply
   ) {
-    try {
-      const registerUseCase = container.resolve(RegisterUseCase);
+    const registerUseCase = container.resolve(RegisterUseCase);
 
-      const { name, email, password } = request.body;
+    const { name, email, password } = request.body;
 
-      await registerUseCase.execute({ name, email, password });
+    await registerUseCase.execute({ name, email, password });
 
-      return reply.code(201).send();
-    } catch (err) {
-      return reply.code(400).send({
-        message: err instanceof Error ? err.message : "Internal Server Error",
-      });
-    }
+    return reply.status(201).send();
   }
 }

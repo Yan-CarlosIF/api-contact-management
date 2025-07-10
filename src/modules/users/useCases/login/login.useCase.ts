@@ -1,6 +1,8 @@
 import { compare } from "bcrypt";
 import { inject, injectable } from "tsyringe";
 
+import { AppError } from "@/shared/errors/app-error";
+
 import { ILoginDTO } from "../../dtos/IloginDTO";
 import { IUsersRepository } from "../../repositories/Iusers.repository";
 
@@ -15,13 +17,13 @@ export class LoginUseCase {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new Error("User not found.");
+      throw new AppError("User not found.", 404);
     }
 
     const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error("Invalid credentials.");
+      throw new AppError("Invalid credentials.", 401);
     }
 
     return {

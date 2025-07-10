@@ -28,7 +28,7 @@ model Contact {
   name        String
   description String?
   phone       String  @db.VarChar(16)
-  email       String
+  email       String  @unique
   userId      Int     @map("user_id")
   user        User    @relation(fields: [userId], references: [id])
   avatarUrl   String? @map("avatar_url")

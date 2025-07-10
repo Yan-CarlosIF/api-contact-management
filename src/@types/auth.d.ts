@@ -14,4 +14,11 @@ declare module "fastify" {
       reply: FastifyReply
     ) => Promise<void>;
   }
+
+  interface FastifyInstance {
+    validImageUrl: (
+      request: FastifyRequest<{ Body: IUpdateAvatarDTO }>,
+      reply: FastifyReply
+    ) => Promise<void>;
+  }
 }

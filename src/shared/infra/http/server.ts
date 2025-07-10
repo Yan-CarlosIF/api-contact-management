@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import "dotenv/config";
-import "./shared/container";
+import "../../container";
 
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
@@ -8,10 +8,13 @@ import fastifyJwt from "@fastify/jwt";
 import { PrismaClient } from "@prisma/client";
 import fastify from "fastify";
 
-import { authMiddleware } from "./middleware/auth";
-import { authRoutes } from "./routes/auth.routes";
-import { contactRoutes } from "./routes/contact.routes";
-import { userRoutes } from "./routes/user.routes";
+import { errorHandler } from "@/shared/errors/error-handler.decorator";
+import { authMiddleware } from "@/shared/infra/http/middlewares/auth.middleware";
+import { authRoutes } from "@/shared/infra/http/routes/auth.routes";
+import { contactRoutes } from "@/shared/infra/http/routes/contact.routes";
+import { userRoutes } from "@/shared/infra/http/routes/user.routes";
+
+import { validImageUrlMiddleware } from "./middlewares/valid-image-url.middleware";
 
 export const prisma = new PrismaClient();
 
@@ -38,9 +41,11 @@ app.register(fastifyJwt, {
 });
 
 authMiddleware(app);
+validImageUrlMiddleware(app);
+errorHandler(app);
 
 app.register(authRoutes, { prefix: "/auth" });
-app.register(contactRoutes, { prefix: "/contact" });
+app.register(contactRoutes, { prefix: "/contacts" });
 app.register(userRoutes, { prefix: "/user" });
 
 app.get("/", () => {

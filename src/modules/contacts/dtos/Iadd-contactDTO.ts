@@ -4,4 +4,5 @@ export interface IAddContactDTO {
   phone: string;
   email: string;
   avatarUrl: string | null;
+  userId: number;
 }

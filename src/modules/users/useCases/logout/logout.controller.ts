@@ -12,7 +12,7 @@ export class LogoutController {
         })
         .send({ message: "Logout realizado com sucesso!" });
     } catch {
-      reply.code(500).send({ error: "Error logging out" });
+      reply.status(500).send({ message: "Error logging out" });
     }
   }
 }

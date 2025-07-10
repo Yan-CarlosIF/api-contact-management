@@ -3,4 +3,5 @@ export interface IUpdateContactDTO {
   name: string;
   email: string;
   phone: string;
+  userId: number;
 }

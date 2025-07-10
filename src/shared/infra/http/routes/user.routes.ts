@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 
-import { GetUserController } from "../modules/users/useCases/getUser/get-user.controller";
-import { RegisterController } from "../modules/users/useCases/register/register.controller";
+import { GetUserController } from "@/modules/users/useCases/getUser/get-user.controller";
+import { RegisterController } from "@/modules/users/useCases/register/register.controller";
 
 const registerUserController = new RegisterController();
 const getUserController = new GetUserController();
