@@ -1,7 +1,15 @@
-import "reflect-metadata"
+import "reflect-metadata";
+
+import { AppError } from "@/shared/errors/app-error";
 
 import { UsersRepositoryInMemory } from "../../repositories/in-memory/users-in-memory.repository";
 import { RegisterUseCase } from "./register.useCase";
+
+const userExample = {
+  email: "lZlYI@example.com",
+  name: "John Doe",
+  password: "123456",
+};
 
 describe("Register User", () => {
   let userRepository: UsersRepositoryInMemory;
@@ -14,16 +22,18 @@ describe("Register User", () => {
   });
 
   it("should be able to create a new user", async () => {
-    const user = {
-      email: "lZlYI@example.com",
-      name: "John Doe",
-      password: "123456",
-    };
+    await registerUseCase.execute(userExample);
 
-    await registerUseCase.execute(user);
-
-    const userCreated = await userRepository.findByEmail(user.email);
+    const userCreated = await userRepository.findByEmail(userExample.email);
 
     expect(userCreated).toHaveProperty("id");
+  });
+
+  it("should not be able to create a user with a already taken email", async () => {
+    await registerUseCase.execute(userExample);
+
+    await expect(
+      registerUseCase.execute(userExample)
+    ).rejects.toEqual(new AppError("Email already taken!", 400));
   });
 });

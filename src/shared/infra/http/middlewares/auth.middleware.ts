@@ -11,7 +11,7 @@ export async function authMiddleware(app: FastifyInstance) {
         const { token } = request.cookies;
 
         if (!token) {
-          throw new AppError("Token not found", 401);
+          throw new AppError("Unauthorized", 401);
         }
 
         const payload = app.jwt.verify<JWTPayload>(token);

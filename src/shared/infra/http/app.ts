@@ -5,9 +5,9 @@ import "../../container";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
-import { PrismaClient } from "@prisma/client";
 import fastify from "fastify";
 
+import { env } from "@/env/env";
 import { errorHandler } from "@/shared/errors/error-handler.decorator";
 import { authMiddleware } from "@/shared/infra/http/middlewares/auth.middleware";
 import { authRoutes } from "@/shared/infra/http/routes/auth.routes";
@@ -15,8 +15,6 @@ import { contactRoutes } from "@/shared/infra/http/routes/contact.routes";
 import { userRoutes } from "@/shared/infra/http/routes/user.routes";
 
 import { validImageUrlMiddleware } from "./middlewares/valid-image-url.middleware";
-
-export const prisma = new PrismaClient();
 
 export const app = fastify();
 
@@ -32,12 +30,12 @@ app.register(fastifyCors, {
 
 app.register(fastifyCookie);
 
-if (!process.env.JWT_SECRET) {
+if (!env.JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined in environment variables.");
 }
 
 app.register(fastifyJwt, {
-  secret: process.env.JWT_SECRET,
+  secret: env.JWT_SECRET,
 });
 
 authMiddleware(app);

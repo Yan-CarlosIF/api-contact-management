@@ -1,6 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { container } from "tsyringe";
 
+import { env } from "@/env/env";
+
 import { ILoginDTO } from "../../dtos/IloginDTO";
 import { LoginUseCase } from "./login.useCase";
 
@@ -22,9 +24,9 @@ export class LoginController {
 
     reply
       .setCookie("token", token, {
-        httpOnly: process.env.production === "true",
-        secure: process.env.production === "true",
-        sameSite: process.env.production === "true" && "none",
+        httpOnly: env.production === "true",
+        secure: env.production === "true",
+        sameSite: env.production === "true" && "none",
         path: "/",
         maxAge: 24 * 60 * 60 * 1000,
       })

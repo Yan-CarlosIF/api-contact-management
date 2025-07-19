@@ -1,13 +1,15 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
+import { env } from "@/env/env";
+
 export class LogoutController {
   handle(_: FastifyRequest, reply: FastifyReply) {
     try {
       reply
         .clearCookie("token", {
-          secure: process.env.production === "true",
-          httpOnly: process.env.production === "true",
-          sameSite: process.env.production === "true" && "none",
+          secure: env.production === "true",
+          httpOnly: env.production === "true",
+          sameSite: env.production === "true" && "none",
           path: "/",
         })
         .send({ message: "Logout realizado com sucesso!" });
