@@ -40,7 +40,15 @@ export class ContactsRepositoryInMemory implements IContactsRepository {
   }
 
   async deleteContact(contactId: number): Promise<void> {
-    this.contacts = this.contacts.filter((contact) => contact.id !== contactId);
+    const contactIndex = this.contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+
+    if (contactIndex === -1) {
+      throw new AppError("Contact not found", 404);
+    }
+
+    this.contacts.splice(contactIndex, 1);
   }
 
   async updateContact(contact: IUpdateContactDTO): Promise<void> {

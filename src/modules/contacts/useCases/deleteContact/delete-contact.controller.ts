@@ -1,8 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { container } from "tsyringe";
 
-import { AppError } from "@/shared/errors/app-error";
-
 import { DeleteContactUseCase } from "./delete-contact.useCase";
 
 export class DeleteContactController {
@@ -11,10 +9,6 @@ export class DeleteContactController {
     reply: FastifyReply
   ) {
     const { contactId } = request.body;
-
-    if (!contactId) {
-      throw new AppError("Contact ID is required", 400);
-    }
 
     const deleteContactUseCase = container.resolve(DeleteContactUseCase);
 
