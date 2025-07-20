@@ -11,9 +11,9 @@ export class UpdateAvatarUseCase {
     private contactsRepository: IContactsRepository
   ) {}
 
-  async execute(userId: number, contactId: number, avatarUrl: string) {
+  async execute(contactId: number, avatarUrl: string) {
     try {
-      await this.contactsRepository.updateAvatar(userId, contactId, avatarUrl);
+      await this.contactsRepository.updateAvatar(contactId, avatarUrl);
     } catch {
       throw new AppError("Contact not found", 404);
     }

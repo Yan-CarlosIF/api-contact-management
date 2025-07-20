@@ -21,7 +21,7 @@ export class AddContactUseCase {
     userId,
   }: IAddContactDTO) {
     const contactAlreadyExists =
-      await this.contactsRepository.findContactPerUser(userId, email);
+      await this.contactsRepository.findContactPerUser(userId, email, phone);
 
     if (contactAlreadyExists) {
       throw new AppError("Contact already exists", 400);

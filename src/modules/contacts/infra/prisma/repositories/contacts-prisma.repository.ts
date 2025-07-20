@@ -26,11 +26,15 @@ export class ContactsRepository implements IContactsRepository {
     });
   }
 
-  async findContactPerUser(userId: number, contactEmail: string) {
+  async findContactPerUser(
+    userId: number,
+    contactEmail: string,
+    contactPhone: string
+  ) {
     return await this.contacts.findFirst({
       where: {
         userId,
-        email: contactEmail,
+        OR: [{ email: contactEmail }, { phone: contactPhone }],
       },
     });
   }
@@ -65,11 +69,10 @@ export class ContactsRepository implements IContactsRepository {
     });
   }
 
-  async updateAvatar(userId: number, contactId: number, avatarUrl: string) {
+  async updateAvatar(contactId: number, avatarUrl: string) {
     await this.contacts.update({
       where: {
         id: contactId,
-        userId,
       },
       data: {
         avatarUrl,
