@@ -10,7 +10,7 @@ export class UpdateContactController {
     reply: FastifyReply
   ) {
     const { id: userId } = request.user;
-    const { id, name, email, phone } = request.body;
+    const { id, name, email, phone, description } = request.body;
 
     const updateContactUseCase = container.resolve(UpdateContactUseCase);
 
@@ -20,6 +20,7 @@ export class UpdateContactController {
       email,
       phone,
       userId,
+      description,
     });
 
     return reply.status(200).send();

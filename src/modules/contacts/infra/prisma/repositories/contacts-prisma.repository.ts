@@ -1,6 +1,7 @@
-import { Contact, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 import { IAddContactDTO } from "@/modules/contacts/dtos/Iadd-contactDTO";
+import { IUpdateContactDTO } from "@/modules/contacts/dtos/Iupdate-contactDTO";
 import { IContactsRepository } from "@/modules/contacts/repositories/Icontacts.repository";
 
 export class ContactsRepository implements IContactsRepository {
@@ -55,7 +56,14 @@ export class ContactsRepository implements IContactsRepository {
     });
   }
 
-  async updateContact({ id, name, email, phone, userId }: Contact) {
+  async updateContact({
+    id,
+    name,
+    email,
+    phone,
+    userId,
+    description,
+  }: IUpdateContactDTO) {
     await this.contacts.update({
       where: {
         id,
@@ -65,6 +73,7 @@ export class ContactsRepository implements IContactsRepository {
         name,
         email,
         phone,
+        description,
       },
     });
   }

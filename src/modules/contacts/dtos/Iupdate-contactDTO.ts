@@ -3,5 +3,6 @@ export interface IUpdateContactDTO {
   name: string;
   email: string;
   phone: string;
+  description: string | null;
   userId: number;
 }

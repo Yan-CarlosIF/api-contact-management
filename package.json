@@ -5,8 +5,8 @@
   "scripts": {
     "start": "npx tsx watch src/shared/infra/http/server.ts",
     "lint": "eslint . --ext .ts",
-    "test": "jest --runInBand",
-    "test:e2e": "jest --config jest.e2e.config.ts --runInBand"
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:e2e": "jest --config jest.e2e.config.ts --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
