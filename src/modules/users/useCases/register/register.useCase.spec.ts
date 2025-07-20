@@ -11,7 +11,7 @@ const userExample = {
   password: "123456",
 };
 
-describe("Register User", () => {
+describe("UNIT - Register User", () => {
   let userRepository: UsersRepositoryInMemory;
   let registerUseCase: RegisterUseCase;
 
@@ -21,7 +21,7 @@ describe("Register User", () => {
     registerUseCase = new RegisterUseCase(userRepository);
   });
 
-  it("should be able to create a new user", async () => {
+  it("should be able to create (register) a new user", async () => {
     await registerUseCase.execute(userExample);
 
     const userCreated = await userRepository.findByEmail(userExample.email);
@@ -29,11 +29,11 @@ describe("Register User", () => {
     expect(userCreated).toHaveProperty("id");
   });
 
-  it("should not be able to create a user with a already taken email", async () => {
+  it("should not be able to create a new user with an already registered email", async () => {
     await registerUseCase.execute(userExample);
 
-    await expect(
-      registerUseCase.execute(userExample)
-    ).rejects.toEqual(new AppError("Email already taken!", 400));
+    await expect(registerUseCase.execute(userExample)).rejects.toEqual(
+      new AppError("Email already taken!", 400)
+    );
   });
 });

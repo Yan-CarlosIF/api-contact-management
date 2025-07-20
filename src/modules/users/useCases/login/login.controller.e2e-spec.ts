@@ -3,7 +3,7 @@ import request from "supertest";
 import { app } from "@/shared/infra/http/app";
 
 describe("E2E - Login User", () => {
-  it("should be able do login a user", async () => {
+  it("should be able to login a user", async () => {
     await request(app.server).post("/user/register").send({
       email: "lZlYI@example.com",
       name: "John Doe",
@@ -15,7 +15,9 @@ describe("E2E - Login User", () => {
       password: "123456",
     });
 
-    const cookie = response.get("Set-Cookie");
+    const cookieHeaders = response.get("Set-Cookie");
+
+    const cookie = cookieHeaders![0].split(";")[0].split("=")[1];
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.message).toBe("Login realizado com sucesso!");
